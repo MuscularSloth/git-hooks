@@ -1,0 +1,16 @@
+#!/bin/bash
+# Stops accidental commits to master/main/develop.
+
+YELLOW='\033[1;33m'
+RED='\033[0;31m'
+NC='\033[0m' # No color
+
+BRANCH=$(git rev-parse --abbrev-ref HEAD)
+
+if [[ "$BRANCH" =~ ^(master|main|develop)$ ]]; then
+  >&2 echo -e "${YELLOW}You are on branch ${RED}$BRANCH${YELLOW}. Are you sure you want to commit to this branch?${NC}"
+  >&2 echo -e "${YELLOW}If so, commit with -n to bypass this pre-commit hook.${NC}"
+  exit 1
+fi
+
+exit 0
