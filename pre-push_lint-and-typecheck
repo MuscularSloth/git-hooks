@@ -1,0 +1,31 @@
+#!/bin/bash
+
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+NC='\033[0m' # No color
+
+# Run linting
+echo -e "Running linting..."
+lint_output=$(npm run lint 2>&1)
+
+if [[ $lint_output ]]; then
+    echo -e "${RED}$lint_output${NC}"
+    echo -e "${RED}Linting failed. Aborting push.${NC}"
+    exit 1
+else
+    echo -e "${GREEN}Linting passed.${NC}"
+fi
+
+# Run type checking
+echo -e "Running type checking..."
+typecheck_output=$(npm run typecheck 2>&1)
+
+if [[ $typecheck_output ]]; then
+    echo -e "${RED}$typecheck_output${NC}"
+    echo -e "${RED}Type checking failed. Aborting push.${NC}"
+    exit 1
+else
+    echo -e "${GREEN}Type checking passed.${NC}"
+fi
+
+exit 0
